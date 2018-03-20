@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, Redirect } from "react-router-dom";
+import Logout from "../components/Logout";
 
 class AdventureSelect extends React.Component {
 
@@ -37,12 +38,15 @@ class AdventureSelect extends React.Component {
     }
 
     selectAdventure(e) {
-        this.props.history.push(`/character/${e.target.id}`)
+        this.props.history.push(`/character/${e.target.id}`, this.state)
     }
     render() {
         if (this.isUserLoggedIn()) {
             return (
                 <div>
+                <nav>
+                    <Logout/>
+                </nav>
                     <h2>Select an Adventure to Embark Upon</h2>
                     <hr />
                     {this.state.adventures.map(a => {

@@ -1,7 +1,7 @@
 import React from "react";
 import Home from "./Home";
 
-class Login extends React.Component {
+class Auth extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -11,9 +11,10 @@ class Login extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.userLogin = this.userLogin.bind(this);
-        this.isUserLoggedInd = this.isUserLoggedInd.bind(this);
+        this.isUserLoggedIn = this.isUserLoggedIn.bind(this);
         this.getSavedToken = this.getSavedToken.bind(this);
     }
+
 
 
 
@@ -49,23 +50,21 @@ class Login extends React.Component {
             body: JSON.stringify({ username: this.state.userEmail, password: this.state.userPassword })
         })
             .then(r => {
-                if(r.ok)
-                {
+                if (r.ok) {
 
-                   return r.text()
+                    return r.text()
                 }
             })
             .then(token => {
 
-                if(token){
+                if (token) {
                     console.log(token)
                     localStorage.setItem("token", token);
                     console.log("User logged in and token stored to local storage")
-                     this.props.history.push(`/adventure`)
+                    this.props.history.push(`/adventure`)
 
                 }
-                else
-                {
+                else {
                     alert("The username/password combination is invalid.  Please try again.")
                 }
             })
@@ -89,4 +88,4 @@ class Login extends React.Component {
     }
 }
 
-export default Login;
+export default Auth;

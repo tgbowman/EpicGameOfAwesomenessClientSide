@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, Redirect } from "react-router-dom";
+import Logout from "../components/Logout";
 
 class CharacterSelect extends React.Component {
     constructor(props) {
@@ -10,6 +11,9 @@ class CharacterSelect extends React.Component {
             token: localStorage.getItem("token")
         }
         this.getUserCharacters = this.getUserCharacters.bind(this)
+        this.goToCharacterCreate = this.goToCharacterCreate.bind(this)
+        this.startGame = this.startGame.bind(this)
+
     }
 
     getUserCharacters() {
@@ -22,6 +26,7 @@ class CharacterSelect extends React.Component {
             headers: {
                 'Authorization': 'Bearer ' + this.state.token
             }
+            
         })
             .then(r => r.json())
             .then(data => {
@@ -52,8 +57,15 @@ class CharacterSelect extends React.Component {
                 })
             })
 
+    }
 
+    goToCharacterCreate() {
+        this.props.history.push(`/characterCreate/${this.state.adventureId}`)
+    }
 
+    startGame(e) {
+
+        this.props.history.push(`/roadBlock/${this.state.adventureId}!${e.target.id}`)
     }
 
     componentDidMount() {
@@ -62,6 +74,9 @@ class CharacterSelect extends React.Component {
     render() {
         return (
             <div>
+                <nav>
+                    <Logout/>
+                </nav>
                 <h2>Select a Character</h2>
                 {this.state.UserCharacters.map(ch => {
                      
@@ -69,12 +84,12 @@ class CharacterSelect extends React.Component {
                         <img src={ch.profileImgUrl} width="150"/>
                         <h3>{ch.name}</h3>
                         <h4>Class: {ch.unitClass.name}</h4>
-                        <button id = {ch.id}>Select {ch.name}</button>
+                        <button id = {ch.id} onClick = {this.startGame}>Select {ch.name}</button>
                         
                     </div>
                 })}
 
-                <button id="CreateNewCharacter">Create a New Character</button>
+                <button id="CreateNewCharacter" onClick = {this.goToCharacterCreate}>Create a New Character</button>
 
                 
             </div>
