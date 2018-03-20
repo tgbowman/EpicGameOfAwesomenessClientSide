@@ -91,7 +91,7 @@ class Combat extends React.Component {
             eRoll = this.rollDice()
             //update the state to reflect the combat changes
             this.setState({
-                combatMessage: `The enemy rolled a ${eRoll}`,
+                combatMessage: `The enemy rolled ${eRoll}`,
                 enemyRoll: eRoll
             })
             //roll the dice to get the player's roll
@@ -99,7 +99,7 @@ class Combat extends React.Component {
             //update the state to reflect the combat changes
             setTimeout(() => {
                 this.setState({
-                    combatMessage: `You rolled a ${pRoll}`,
+                    combatMessage: `You rolled ${pRoll}`,
                     playerRoll: pRoll
                 })
 
@@ -135,14 +135,14 @@ class Combat extends React.Component {
                         eRoll = this.rollDice()
                         setTimeout(() => {
                             this.setState({
-                                combatMessage: `The enemy rolled a ${eRoll}`,
+                                combatMessage: `The enemy rolled ${eRoll}`,
                                 enemyRoll: eRoll
 
                             })
                             pRoll = this.rollDice()
                             setTimeout(() => {
                                 this.setState({
-                                    combatMessage: `You rolled a ${pRoll}`,
+                                    combatMessage: `You rolled ${pRoll}`,
                                     playerRoll: pRoll
 
                                 })
@@ -183,25 +183,37 @@ class Combat extends React.Component {
     render() {
         return (
             <div>
-                <Logout />
-                <h2>{this.state.enemyName}</h2>
-                <img src={this.state.enemy.imageUrl} className="profilePic enemy" width="150" />
-                <h4>Health: {this.state.enemyHP}</h4>
-                <p>Enemy Roll: {this.state.enemyRoll}</p>
-                <h2>{this.state.combatMessage}</h2>
-                <p>Your Roll: {this.state.playerRoll}</p>
-                <h2>{this.state.player.name}</h2>
-                <img src={this.state.player.profileImgUrl} className="profilePic player" width="150" />
-                <h4>Health: {this.state.playerHP}</h4>
-                <div onClick={this.combatMove} className="abilityBox" id={this.state.player.unitClass.abilityOneDamage}>
-                    <h4 id={this.state.player.unitClass.abilityOneDamage}>{this.state.player.unitClass.abilityOneName}</h4>
-                    <p id={this.state.player.unitClass.abilityOneDamage}>{this.state.player.unitClass.abilityOneDescription}</p>
-                    <p id={this.state.player.unitClass.abilityOneDamage}>Damage: {this.state.player.unitClass.abilityOneDamage}</p>
+                <nav>
+                    <Logout />
+                </nav>
+                {/************** Enemy Panel *******************/}
+                <div className="enemyPanel">
+                    <h2>{this.state.enemyName}</h2>
+                    <img src={this.state.enemy.imageUrl} className="profilePic enemy" width="150" />
+                    <h4>Health: {this.state.enemyHP}</h4>
                 </div>
-                <div onClick={this.combatMove} className="abilityBox" id={this.state.player.unitClass.abilityTwoDamage}>
-                    <h4 id={this.state.player.unitClass.abilityTwoDamage}>{this.state.player.unitClass.abilityTwoName}</h4>
-                    <p id={this.state.player.unitClass.abilityTwoDamage}>{this.state.player.unitClass.abilityTwoDescription}</p>
-                    <p id={this.state.player.unitClass.abilityTwoDamage}>Damage: {this.state.player.unitClass.abilityTwoDamage}</p>
+                {/**************** Combat Message Panel ************/}
+                <div className="combatMessagePanel">
+                    <p>Enemy Roll: {this.state.enemyRoll}</p>
+                    <h2>{this.state.combatMessage}</h2>
+                    <p>Your Roll: {this.state.playerRoll}</p>
+                </div>
+                {/***************** Player Panel ********************/}
+                <div className="playerPanel">
+                    <h2>{this.state.player.name}</h2>
+                    <img src={this.state.player.profileImgUrl} className="profilePic player" width="150" />
+                    <h4>Health: {this.state.playerHP}</h4>
+                    {/*************Player Abilities *************/}
+                    <div onClick={this.combatMove} className="abilityBox" id={this.state.player.unitClass.abilityOneDamage}>
+                        <h4 id={this.state.player.unitClass.abilityOneDamage}>{this.state.player.unitClass.abilityOneName}</h4>
+                        <p id={this.state.player.unitClass.abilityOneDamage}>{this.state.player.unitClass.abilityOneDescription}</p>
+                        <p id={this.state.player.unitClass.abilityOneDamage}>Damage: {this.state.player.unitClass.abilityOneDamage}</p>
+                    </div>
+                    <div onClick={this.combatMove} className="abilityBox" id={this.state.player.unitClass.abilityTwoDamage}>
+                        <h4 id={this.state.player.unitClass.abilityTwoDamage}>{this.state.player.unitClass.abilityTwoName}</h4>
+                        <p id={this.state.player.unitClass.abilityTwoDamage}>{this.state.player.unitClass.abilityTwoDescription}</p>
+                        <p id={this.state.player.unitClass.abilityTwoDamage}>Damage: {this.state.player.unitClass.abilityTwoDamage}</p>
+                    </div>
                 </div>
             </div>
         )
