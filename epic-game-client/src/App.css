@@ -70,12 +70,16 @@ ul  {
 
 .enemyHealth {
   margin-top: -200px;
-
 }
 
 .enemyPanel {
   background-color: #22282d;
   padding: 15px;
+  height: 280px;
+}
+
+.enemyRow {
+  height: 280px;
 }
 
 .returnToHome {
@@ -84,5 +88,5 @@ text-align: center;
 }
 
 .roadBlockDesc {
-  font-family: 'Dawning of a New Day', cursive;
+  /* font-family: 'Dawning of a New Day', cursive; */
 }

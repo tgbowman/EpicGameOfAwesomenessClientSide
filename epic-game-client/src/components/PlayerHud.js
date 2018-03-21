@@ -33,7 +33,7 @@ class PlayerHud extends React.Component {
                         <div className="col-4">
                             <div className="row">
                                 <div className="col-4">
-                                    <img src={this.props.player.profileImgUrl} className="profilePic player" width="150" />
+                                    <img src={this.props.player.profileImgUrl} className="profilePic player border border-light" width="150" height="212" />
                                 </div>
                                 <h2 className="col-4">{this.props.player.name}</h2>
                                 <h4 className="col-4 offset-4 health">Health: {this.props.playerHP}</h4>
