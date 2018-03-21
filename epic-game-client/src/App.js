@@ -20,7 +20,7 @@ class App extends React.Component {
             <Route path='/adventure' component = {AdventureSelect}/>
             <Route path='/character/:advId' component = {CharacterSelect}/>
             <Route path='/characterCreate/:advId' component = {CharacterCreate}/>
-            <Route path='/roadBlock/:data' component = {RoadBlock}/>
+            <Route path='/roadBlock/:prevOptId' component = {RoadBlock}/>
             <Route path='/combat/:combatOptionId' component = {Combat}/>
           </div>
 

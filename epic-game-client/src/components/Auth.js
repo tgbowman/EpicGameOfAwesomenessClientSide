@@ -73,7 +73,7 @@ class Auth extends React.Component {
     render() {
 
         return (
-            <div>
+            <div className="text-light text-center">
                 <h2>Login</h2>
                 <p>If you don't have an account, entering an email and password will create one for you!</p>
                 <input type="text" name="userEmail" placeholder="Email" value={this.state.userEmail} onChange={this.handleChange} />

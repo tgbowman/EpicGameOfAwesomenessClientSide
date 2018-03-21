@@ -1,11 +1,16 @@
 import React from "react";
-// import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Logout from "../components/Logout";
+import RoadBlock from "../components/RoadBlock";
+import PlayerHud from "../components/PlayerHud";
+import EnemyPanel from "../components/EnemyPanel";
 
 class Combat extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            characterId: localStorage.getItem("characterId"),
+            previousOptionId: null,
             enemyName: "",
             enemyHP: null,
             playerHP: null,
@@ -20,28 +25,48 @@ class Combat extends React.Component {
                 }
             }
         }
-        this.getEnemy = this.getCombatants.bind(this);
+        // this.getEnemy = this.getCombatants.bind(this);
         // this.rollDice = this.rollDice.bind(this);
         this.combatMove = this.combatMove.bind(this);
+        this.godMode = this.godMode.bind(this)
+        this.getCombatants = this.getCombatants.bind(this)
     }
 
     componentDidMount() {
-        let combatId = this.props.match.params.combatOptionId.split("!")[0]
-        let characterId = this.props.match.params.combatOptionId.split("!")[1]
-        console.log(characterId)
-        fetch(`http://localhost:5000/api/pathOption/${combatId}`, {
+        fetch(`http://localhost:5000/api/adventureChoice/${this.state.characterId}/${localStorage.getItem("adventureId")}`, {
             method: "GET",
-            mode: "cors",
+            mode: "cors"
         })
             .then(r => r.json())
+            .then(previousAdvData => {
+                console.log(previousAdvData)
+                this.setState({
+                    previousOptionId: previousAdvData.pathOptionId
+                })
+                return previousAdvData
+            })
             .then(data => {
                 console.log(data)
-                this.setState({
-                    enemyName: data.enemyType
-                }, this.getCombatants(characterId))
+                fetch(`http://localhost:5000/api/pathOption/${data.pathOptionId}`, {
+                    method: "GET",
+                    mode: "cors",
+                })
+                    .then(r => r.json())
+                    .then(data => {
+                        console.log(data.enemyType)
+                        this.setState({
+                            enemyName: data.enemyType
+                        })
+                        return data
+                    })
+                    .then(d => {
+                        this.getCombatants(this.state.characterId, d.enemyType)
+                    })
             })
     }
-    getCombatants(charId) {
+    getCombatants(charId, enemy) {
+        console.log(enemy)
+        console.log(this.state.previousOptionId)
         if (this.state.enemyName !== null) {
             fetch("http://localhost:5000/api/enemy", {
                 method: "GET",
@@ -49,8 +74,9 @@ class Combat extends React.Component {
             })
                 .then(r => r.json())
                 .then(data => {
-                    console.log(data)
-                    let enemyObj = data.filter(e => e.name == this.state.enemyName)[0]
+                    console.log(this.state.enemyName)
+                    let enemyObj = data.filter(e => e.name == enemy)[0]
+                    console.log(enemyObj)
                     this.setState({
                         enemy: enemyObj,
                         enemyHP: enemyObj.hp
@@ -91,7 +117,7 @@ class Combat extends React.Component {
             eRoll = this.rollDice()
             //update the state to reflect the combat changes
             this.setState({
-                combatMessage: `The enemy rolled ${eRoll}`,
+                combatMessage: `The ${this.state.enemyName} rolled ${eRoll}`,
                 enemyRoll: eRoll
             })
             //roll the dice to get the player's roll
@@ -105,14 +131,31 @@ class Combat extends React.Component {
 
                 setTimeout(() => {
                     //if the player's roll is equal or higher than the enemies the players move is successful and the enemy takes damage
-                    if (pRoll >= eRoll) {
+                    if (pRoll+20 >= eRoll) {
                         let newEnemyHP = this.state.enemyHP -= playerDamage
-                        this.setState({
-                            combatMessage: `Your attack is succesful! You deal ${playerDamage} damage to the ${this.state.enemyName}!`,
-                            enemyRoll: null,
-                            playerRoll: null,
-                            enemyHP: newEnemyHP
-                        })
+                        if (newEnemyHP <= 0) {
+                            fetch(`http://localhost:5000/api/character/${this.state.characterId}`, {
+                                method: "PATCH",
+                                mode:"cors",
+                                headers: {
+                                    'Authorization': 'Bearer ' + this.state.token,
+                                    "Content-Type": "application/json"
+                                },
+                                body: {
+                                    hp: this.state.playerHP
+                                }
+                            })
+                            .then(d => {
+                                this.props.history.push(`/roadBlock/${this.state.previousOptionId}`)
+                            })
+                        } else {
+                            this.setState({
+                                combatMessage: `Your attack is succesful! You deal ${playerDamage} damage to the ${this.state.enemyName}!`,
+                                enemyRoll: null,
+                                playerRoll: null,
+                                enemyHP: newEnemyHP
+                            })
+                        }
                         //if the player's roll is less than the enemies the player's attack misses.
                     } else {
                         this.setState({
@@ -135,7 +178,7 @@ class Combat extends React.Component {
                         eRoll = this.rollDice()
                         setTimeout(() => {
                             this.setState({
-                                combatMessage: `The enemy rolled ${eRoll}`,
+                                combatMessage: `The ${this.state.enemyName} rolled ${eRoll}`,
                                 enemyRoll: eRoll
 
                             })
@@ -155,6 +198,7 @@ class Combat extends React.Component {
                                             enemyRoll: null,
                                             playerRoll: null
                                         })
+
                                     }
                                     else {
                                         this.setState({
@@ -167,57 +211,64 @@ class Combat extends React.Component {
                                         this.setState({
                                             combatMessage: "Select an ability..."
                                         })
-                                    }, 1500)
+                                    }, 1200)
                                     playerTurn = true
 
-                                }, 2000)
-                            }, 2000)
+                                }, 1200)
+                            }, 1200)
                         }, 1)
 
-                    }, 2000)
-                }, 2000)
-            }, 2000)
+                    }, 1200)
+                }, 1200)
+            }, 1200)
 
-        }, 1000)
+        }, 10)
+    }
+
+    godMode() {
+        let eHP = 0
+        if (eHP <= 0) {
+            this.props.history.push(`/roadBlock/${this.state.previousOptionId}`)
+
+        }
     }
     render() {
-        return (
-            <div>
-                <nav>
-                    <Logout />
-                </nav>
-                {/************** Enemy Panel *******************/}
-                <div className="enemyPanel">
-                    <h2>{this.state.enemyName}</h2>
-                    <img src={this.state.enemy.imageUrl} className="profilePic enemy" width="150" />
-                    <h4>Health: {this.state.enemyHP}</h4>
-                </div>
-                {/**************** Combat Message Panel ************/}
-                <div className="combatMessagePanel">
-                    <p>Enemy Roll: {this.state.enemyRoll}</p>
-                    <h2>{this.state.combatMessage}</h2>
-                    <p>Your Roll: {this.state.playerRoll}</p>
-                </div>
-                {/***************** Player Panel ********************/}
-                <div className="playerPanel">
-                    <h2>{this.state.player.name}</h2>
-                    <img src={this.state.player.profileImgUrl} className="profilePic player" width="150" />
-                    <h4>Health: {this.state.playerHP}</h4>
-                    {/*************Player Abilities *************/}
-                    <div onClick={this.combatMove} className="abilityBox" id={this.state.player.unitClass.abilityOneDamage}>
-                        <h4 id={this.state.player.unitClass.abilityOneDamage}>{this.state.player.unitClass.abilityOneName}</h4>
-                        <p id={this.state.player.unitClass.abilityOneDamage}>{this.state.player.unitClass.abilityOneDescription}</p>
-                        <p id={this.state.player.unitClass.abilityOneDamage}>Damage: {this.state.player.unitClass.abilityOneDamage}</p>
+        if (this.state.playerHP > 0 && this.state.enemyHP > 0) {
+            return (
+                <div className="text-light">
+                    {/************** Enemy Panel *******************/}
+                    <EnemyPanel enemy = {this.state.enemy} enemyHP = {this.state.enemyHP}/>
+                    {/**************** Combat Message Panel ************/}
+                    <div className="combatMessagePanel text-center">
+
+                        <h2>{this.state.combatMessage}</h2>
+
                     </div>
-                    <div onClick={this.combatMove} className="abilityBox" id={this.state.player.unitClass.abilityTwoDamage}>
-                        <h4 id={this.state.player.unitClass.abilityTwoDamage}>{this.state.player.unitClass.abilityTwoName}</h4>
-                        <p id={this.state.player.unitClass.abilityTwoDamage}>{this.state.player.unitClass.abilityTwoDescription}</p>
-                        <p id={this.state.player.unitClass.abilityTwoDamage}>Damage: {this.state.player.unitClass.abilityTwoDamage}</p>
-                    </div>
+                    {/***************** Player Panel ********************/}
+                    <PlayerHud combat="true" player={this.state.player} combatMove={this.combatMove} playerHP={this.state.playerHP} />
                 </div>
-            </div>
-        )
+            )
+        }
+        if (this.state.previousOptionId == null || this.state.enemyName == "") {
+            return (
+                <div>
+                    <h3>Preparing for battle!</h3>
+                </div>
+            )
+        }
+
+        if (this.state.playerHP <= 0 && this.state.previousOptionId != null) {
+
+            return (
+                <div className="text-light">
+                    <h3>The {this.state.enemyName} has defeated you!</h3>
+                    <Link to="/adventure">Return to Adventure Select</Link>
+                </div>
+            )
+        }
+
     }
+
 }
 
 export default Combat;

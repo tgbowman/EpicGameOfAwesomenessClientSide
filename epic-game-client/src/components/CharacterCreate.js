@@ -22,8 +22,8 @@ class CharacterCreate extends React.Component {
                     { "Mage": ["https://i.pinimg.com/originals/38/e4/8d/38e48d81f213cc2ed24e431d2fc508f0.jpg", "https://i.pinimg.com/originals/53/24/93/532493b498212754985246b06969783d.jpg"] },
                     { "Monk": ["https://i.pinimg.com/originals/b1/04/a8/b104a8422b45a28db783cd751a431ed9.jpg", "http://img11.deviantart.net/a0d7/i/2013/266/c/1/fe_by_cpucore-d6nily4.jpg"] }
                 ],
-                ProfilePicOption1: "http://s3.amazonaws.com/37assets/svn/765-default-avatar.png",
-                ProfilePicOption2: "http://interactiveqa.com/wp-content/uploads/2015/07/female-icon-390x450.jpg"
+                ProfilePicOption1: "https://t3.ftcdn.net/jpg/01/40/46/18/240_F_140461899_dvRngd7xvZtqCUHLiIyRjgflq2EmwnVP.jpg",
+                ProfilePicOption2: "https://t4.ftcdn.net/jpg/01/40/46/19/240_F_140461947_tWo9D0W8QQnrhzhCXJbDHIXblMV9BTZv.jpg"
 
 
             }
@@ -68,7 +68,7 @@ class CharacterCreate extends React.Component {
             .then(data=> {
                 
                 console.log(data)
-                this.props.history.push(`/roadBlock/${this.props.match.params.advId}!${data.id}`)
+                this.props.history.push(`/roadBlock/0`)
             })
     }
 
@@ -110,7 +110,7 @@ class CharacterCreate extends React.Component {
     render() {
         if (this.isUserLoggedIn()) {
             return (
-                <div>
+                <div className="text-light text-center">
                     <nav>
                         <Logout />
                     </nav>
@@ -124,14 +124,15 @@ class CharacterCreate extends React.Component {
                             return <option key={c.id} id={c.id}>{c.name}</option>
                         })}
                     </select>
+                
                     <h4>Class Abilities</h4>
                     <ul>
                         <li>{this.state.characterAbility1}: {this.state.characterAbility1Desc}</li>
                         <li>{this.state.characterAbility2}: {this.state.characterAbility2Desc}</li>
                     </ul>
                     <h4>Profile Image</h4>
-                    <img name="characterProfileImgUrl" src={this.state.ProfilePicOption1} id={this.state.ProfilePicOption1} width="150" onClick={this.handleChange} />
-                    <img name="characterProfileImgUrl" src={this.state.ProfilePicOption2} id={this.state.ProfilePicOption2} width="150" onClick={this.handleChange} />
+                    <img className="clickable profileImg" name="characterProfileImgUrl" src={this.state.ProfilePicOption1} id={this.state.ProfilePicOption1} width="150" height="279" onClick={this.handleChange} />
+                    <img className="clickable profileImg" name="characterProfileImgUrl" src={this.state.ProfilePicOption2} id={this.state.ProfilePicOption2} width="150" height="279"onClick={this.handleChange} />
                     <br />
                     <button onClick = {this.createCharacter}>Create Character</button>
                 </div>

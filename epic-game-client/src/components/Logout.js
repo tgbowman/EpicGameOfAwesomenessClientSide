@@ -20,7 +20,7 @@ class Logout extends React.Component
     render()
     {
         return(
-            <div>
+            <div className="text-right">
                 <Link to="/" id="logOutBtn" onClick= {this.logout}>Log Out</Link>
             </div>
         )

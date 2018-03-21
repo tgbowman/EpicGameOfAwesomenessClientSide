@@ -64,8 +64,18 @@ class CharacterSelect extends React.Component {
     }
 
     startGame(e) {
-
-        this.props.history.push(`/roadBlock/${this.state.adventureId}!${e.target.id}`)
+        localStorage.setItem("characterId", e.target.id)
+        fetch(`http://localhost:5000/api/adventureChoice/${e.target.id}/${this.state.adventureId}`,{
+            method: "DELETE",
+            mode: "cors",
+            headers: {
+                'Authorization': 'Bearer ' + this.state.token,
+                "Content-Type": "application/json"
+            }
+        })
+        .then(r => {
+            this.props.history.push(`/roadBlock/0`)
+        })
     }
 
     componentDidMount() {
@@ -73,14 +83,14 @@ class CharacterSelect extends React.Component {
     }
     render() {
         return (
-            <div>
+            <div className="text-light text-center">
                 <nav>
                     <Logout/>
                 </nav>
                 <h2>Select a Character</h2>
                 {this.state.UserCharacters.map(ch => {
                      
-                    return <div key = {ch.id} className="CharacterSelectBox">
+                    return <div key = {ch.id} className="CharacterSelectBox border border-light">
                         <img src={ch.profileImgUrl} width="150"/>
                         <h3>{ch.name}</h3>
                         <h4>Class: {ch.unitClass.name}</h4>

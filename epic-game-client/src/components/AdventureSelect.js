@@ -38,12 +38,13 @@ class AdventureSelect extends React.Component {
     }
 
     selectAdventure(e) {
+        localStorage.setItem("adventureId", e.target.id)
         this.props.history.push(`/character/${e.target.id}`, this.state)
     }
     render() {
         if (this.isUserLoggedIn()) {
             return (
-                <div>
+                <div className="text-light text-center">
                 <nav>
                     <Logout/>
                 </nav>
@@ -61,7 +62,7 @@ class AdventureSelect extends React.Component {
         }
         else {
             return (
-                <div>
+                <div className="text-light text-center">
                     <h2>You must be logged in to select an adventure</h2>
                 </div>
             )
