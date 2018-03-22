@@ -3,6 +3,7 @@ import { Link, Redirect } from "react-router-dom";
 import Logout from "../components/Logout";
 import Combat from "../components/Combat";
 import PlayerHud from "../components/PlayerHud";
+import ForestAmbient from "../Sound/ForestAmbient.mp3"
 
 class RoadBlock extends React.Component {
     constructor(props) {
@@ -21,7 +22,9 @@ class RoadBlock extends React.Component {
     }
 
 
-
+    componentWillMount() {
+        this.ForestAmbient = new Audio(ForestAmbient)
+    }
     componentDidMount() {
         fetch(`http://localhost:5000/api/adventureChoice/${this.state.characterId}/${this.state.adventureId}`, {
             method: "GET",
@@ -50,8 +53,13 @@ class RoadBlock extends React.Component {
                         })
                     })
             })
+            this.ForestAmbient.play();
         setTimeout(this.changeRoadBlock(), 1000)
 
+    }
+
+    componentWillUnmount() {
+        this.ForestAmbient.pause();
     }
 
     isUserLoggedIn() {

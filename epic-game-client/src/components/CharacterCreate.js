@@ -66,7 +66,7 @@ class CharacterCreate extends React.Component {
         })
             .then(r => r.json())
             .then(data=> {
-                
+                localStorage.setItem("characterId", data.id)
                 console.log(data)
                 this.props.history.push(`/roadBlock/0`)
             })
