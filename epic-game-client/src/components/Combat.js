@@ -31,8 +31,8 @@ class Combat extends React.Component {
         this.godMode = this.godMode.bind(this)
         this.getCombatants = this.getCombatants.bind(this)
     }
-
     componentDidMount() {
+
         fetch(`http://localhost:5000/api/adventureChoice/${this.state.characterId}/${localStorage.getItem("adventureId")}`, {
             method: "GET",
             mode: "cors"
@@ -103,9 +103,13 @@ class Combat extends React.Component {
     rollDice() {
         return (Math.floor(Math.random() * 20) + 1)
     }
+
     combatMove(e) {
+
         let playerTurn = true
-        let playerDamage = e.target.id
+        let playerDamage = e.target.id.split("!")[0]
+        let playerAttackName = e.target.id.split("!")[1]
+        console.log(playerAttackName)
         //variables to store the enemy and player rolls
         let eRoll = null;
         let pRoll = null
@@ -131,12 +135,12 @@ class Combat extends React.Component {
 
                 setTimeout(() => {
                     //if the player's roll is equal or higher than the enemies the players move is successful and the enemy takes damage
-                    if (pRoll+20 >= eRoll) {
+                    if (pRoll >= eRoll) {
                         let newEnemyHP = this.state.enemyHP -= playerDamage
                         if (newEnemyHP <= 0) {
                             fetch(`http://localhost:5000/api/character/${this.state.characterId}`, {
                                 method: "PATCH",
-                                mode:"cors",
+                                mode: "cors",
                                 headers: {
                                     'Authorization': 'Bearer ' + this.state.token,
                                     "Content-Type": "application/json"
@@ -145,9 +149,9 @@ class Combat extends React.Component {
                                     hp: this.state.playerHP
                                 }
                             })
-                            .then(d => {
-                                this.props.history.push(`/roadBlock/${this.state.previousOptionId}`)
-                            })
+                                .then(d => {
+                                    this.props.history.push(`/roadBlock/${this.state.previousOptionId}`)
+                                })
                         } else {
                             this.setState({
                                 combatMessage: `Your attack is succesful! You deal ${playerDamage} damage to the ${this.state.enemyName}!`,
@@ -236,8 +240,10 @@ class Combat extends React.Component {
         if (this.state.playerHP > 0 && this.state.enemyHP > 0) {
             return (
                 <div className="text-light">
+                    <audio id="Punch"><source src="PUNCH.mp3" /></audio>
+
                     {/************** Enemy Panel *******************/}
-                    <EnemyPanel enemy = {this.state.enemy} enemyHP = {this.state.enemyHP}/>
+                    <EnemyPanel enemy={this.state.enemy} enemyHP={this.state.enemyHP} />
                     {/**************** Combat Message Panel ************/}
                     <div className="combatMessagePanel text-center">
 
