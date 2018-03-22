@@ -1,3 +1,8 @@
+//************** COMBAT COMPONENT ************************//
+//This component gathers the character and enemy data from the DB and renders it in the DOM//
+//It handles the combat functionality as well//
+
+
 import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import Logout from "../components/Logout";
@@ -21,6 +26,7 @@ class Combat extends React.Component {
         this.state = {
             characterId: localStorage.getItem("characterId"),
             previousOptionId: null,
+            inCombat: false,
             enemyName: "",
             enemyHP: null,
             playerHP: null,
@@ -54,7 +60,7 @@ class Combat extends React.Component {
         this.Backstab = new Audio(Backstab)
         this.Eviscerate = new Audio(Eviscerate)
     }
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.BlackBlade.pause()
     }
     componentDidMount() {
@@ -128,174 +134,179 @@ class Combat extends React.Component {
     }
 
     combatMove(e) {
-
-        let playerTurn = true
-        let playerMoveData = e.target.id.split("!")[0]
-        console.log(playerMoveData)
-        let playerDamage = parseInt(playerMoveData.split("-")[0])
-        let playerHealing = parseInt(playerMoveData.split("-")[1])
-        console.log(playerDamage)
-        console.log(playerHealing)
-        let playerAttackName = e.target.id.split("!")[1]
-        //variables to store the enemy and player rolls
-        let eRoll = null;
-        let pRoll = null
-
-        //players turn
-
-        setTimeout(() => {
-            //roll the dice to get the enemies roll
-            eRoll = this.rollDice()
-            //update the state to reflect the combat changes
+        if (this.state.inCombat === false) {
             this.setState({
-                combatMessage: `The ${this.state.enemyName} rolled ${eRoll}`,
-                enemyRoll: eRoll
+                inCombat: true
             })
-            //roll the dice to get the player's roll
-            pRoll = this.rollDice()
-            //update the state to reflect the combat changes
+            let playerTurn = true
+            let playerMoveData = e.target.id.split("!")[0]
+            console.log(playerMoveData)
+            let playerDamage = parseInt(playerMoveData.split("-")[0])
+            let playerHealing = parseInt(playerMoveData.split("-")[1])
+            console.log(playerDamage)
+            console.log(playerHealing)
+            let playerAttackName = e.target.id.split("!")[1]
+            //variables to store the enemy and player rolls
+            let eRoll = null;
+            let pRoll = null
+
+            //players turn
+
             setTimeout(() => {
+                //roll the dice to get the enemies roll
+                eRoll = this.rollDice()
+                //update the state to reflect the combat changes
                 this.setState({
-                    combatMessage: `You rolled ${pRoll}`,
-                    playerRoll: pRoll
+                    combatMessage: `The ${this.state.enemyName} rolled ${eRoll}`,
+                    enemyRoll: eRoll
                 })
+                //roll the dice to get the player's roll
+                pRoll = this.rollDice()
+                //update the state to reflect the combat changes
                 setTimeout(() => {
-                    //if the player's roll is equal or higher than the enemies the players move is successful and the enemy takes damage
-                    if (pRoll >= eRoll) {
-                        let newEnemyHP = this.state.enemyHP -= playerDamage
-                        let newPlayerHP
-                        if (this.state.playerHP + playerHealing >= 100) {
-                            newPlayerHP = 100
-                        }
-                        else {
-                            newPlayerHP = this.state.playerHP += playerHealing
-                        }
-                        if (newEnemyHP <= 0) {
-                            fetch(`http://localhost:5000/api/character/${this.state.characterId}`, {
-                                method: "PATCH",
-                                mode: "cors",
-                                headers: {
-                                    'Authorization': 'Bearer ' + this.state.token,
-                                    "Content-Type": "application/json"
-                                },
-                                body: {
-                                    hp: this.state.playerHP
-                                }
-                            })
-                                .then(d => {
-                                    this.props.history.push(`/roadBlock/${this.state.previousOptionId}`)
-                                })
-                        } else {
-                            switch (playerAttackName) {
-                                case "Punch":
-                                    this.Punch.play();
-                                    break;
-                                case "Slap of Death":
-                                    this.Slap.play();
-                                    break;
-                                case "Fireball":
-                                    this.Fireball.play();
-                                    break;
-                                case "Arcane Barrier":
-                                    this.ArcaneBarrier.play();
-                                    break;
-                                case "Quick Attack":
-                                    this.QuickAttack.play();
-                                    break;
-                                case "Spiked Armor":
-                                    this.SpikeArmor.play();
-                                    break;
-                                case "Backstab":
-                                    this.Backstab.play();
-                                    break;
-                                case "Eviscerate":
-                                    this.Eviscerate.play();
-                                    break;
-                                
-
-                            }
-                            this.setState({
-                                combatMessage: `Your attack is succesful! You deal ${playerDamage} damage to the ${this.state.enemyName}!`,
-                                enemyRoll: null,
-                                playerRoll: null,
-                                enemyHP: newEnemyHP
-                            })
-                        }
-                        //if the player's roll is less than the enemies the player's attack misses.
-                    } else {
-                        this.setState({
-                            combatMessage: "Your attack missed!",
-                            enemyRoll: null,
-                            playerRoll: null
-                        })
-                    }
-                    //ENEMY turn
+                    this.setState({
+                        combatMessage: `You rolled ${pRoll}`,
+                        playerRoll: pRoll
+                    })
                     setTimeout(() => {
-                        let enemyMoveIndex = Math.floor(Math.random() * 2) + 1
+                        //if the player's roll is equal or higher than the enemies the players move is successful and the enemy takes damage
+                        if (pRoll >= eRoll) {
+                            let newEnemyHP = this.state.enemyHP -= playerDamage
+                            let newPlayerHP
+                            if (this.state.playerHP + playerHealing >= 100) {
+                                newPlayerHP = 100
+                            }
+                            else {
+                                newPlayerHP = this.state.playerHP += playerHealing
+                            }
+                            if (newEnemyHP <= 0) {
+                                fetch(`http://localhost:5000/api/character/${this.state.characterId}`, {
+                                    method: "PATCH",
+                                    mode: "cors",
+                                    headers: {
+                                        'Authorization': 'Bearer ' + this.state.token,
+                                        "Content-Type": "application/json"
+                                    },
+                                    body: {
+                                        hp: this.state.playerHP
+                                    }
+                                })
+                                    .then(d => {
+                                        this.props.history.push(`/roadBlock/${this.state.previousOptionId}`)
+                                    })
+                            } else {
+                                switch (playerAttackName) {
+                                    case "Punch":
+                                        this.Punch.play();
+                                        break;
+                                    case "Slap of Death":
+                                        this.Slap.play();
+                                        break;
+                                    case "Fireball":
+                                        this.Fireball.play();
+                                        break;
+                                    case "Arcane Barrier":
+                                        this.ArcaneBarrier.play();
+                                        break;
+                                    case "Quick Attack":
+                                        this.QuickAttack.play();
+                                        break;
+                                    case "Spiked Armor":
+                                        this.SpikeArmor.play();
+                                        break;
+                                    case "Backstab":
+                                        this.Backstab.play();
+                                        break;
+                                    case "Eviscerate":
+                                        this.Eviscerate.play();
+                                        break;
 
-                        let enemyDamage = null;
-                        if (enemyMoveIndex === 1) {
-                            enemyDamage = this.state.enemy.unitClass.abilityOneDamage
-                        }
-                        else {
-                            enemyDamage = this.state.enemy.unitClass.abilityTwoDamage
-                        }
-                        eRoll = this.rollDice()
-                        setTimeout(() => {
+
+                                }
+                                this.setState({
+                                    combatMessage: `Your attack is succesful! You deal ${playerDamage} damage to the ${this.state.enemyName}!`,
+                                    enemyRoll: null,
+                                    playerRoll: null,
+                                    enemyHP: newEnemyHP
+                                })
+                            }
+                            //if the player's roll is less than the enemies the player's attack misses.
+                        } else {
                             this.setState({
-                                combatMessage: `The ${this.state.enemyName} rolled ${eRoll}`,
-                                enemyRoll: eRoll
-
+                                combatMessage: "Your attack missed!",
+                                enemyRoll: null,
+                                playerRoll: null
                             })
-                            pRoll = this.rollDice()
+                        }
+                        //ENEMY turn
+                        setTimeout(() => {
+                            let enemyMoveIndex = Math.floor(Math.random() * 2) + 1
+
+                            let enemyDamage = null;
+                            if (enemyMoveIndex === 1) {
+                                enemyDamage = this.state.enemy.unitClass.abilityOneDamage
+                            }
+                            else {
+                                enemyDamage = this.state.enemy.unitClass.abilityTwoDamage
+                            }
+                            eRoll = this.rollDice()
                             setTimeout(() => {
                                 this.setState({
-                                    combatMessage: `You rolled ${pRoll}`,
-                                    playerRoll: pRoll
+                                    combatMessage: `The ${this.state.enemyName} rolled ${eRoll}`,
+                                    enemyRoll: eRoll
 
                                 })
+                                pRoll = this.rollDice()
                                 setTimeout(() => {
-                                    if (eRoll >= pRoll) {
-                                        let newPHP = this.state.playerHP -= enemyDamage
-                                        switch (this.state.enemyName) {
-                                            case "Lich":
-                                                this.Fireball.play();
-                                                break;
-                                            case "Dragon":
-                                                this.FireballBig.play();
-                                                break;
-                                        }
-                                        this.setState({
-                                            combatMessage: `The ${this.state.enemyName}'s attack is successful!  You take ${enemyDamage} damage!`,
-                                            playerHP: newPHP,
-                                            enemyRoll: null,
-                                            playerRoll: null
-                                        })
+                                    this.setState({
+                                        combatMessage: `You rolled ${pRoll}`,
+                                        playerRoll: pRoll
 
-                                    }
-                                    else {
-                                        this.setState({
-                                            combatMessage: `The ${this.state.enemyName}'s attack misses!`,
-                                            enemyRoll: null,
-                                            playerRoll: null
-                                        })
-                                    }
+                                    })
                                     setTimeout(() => {
-                                        this.setState({
-                                            combatMessage: "Select an ability..."
-                                        })
+                                        if (eRoll >= pRoll) {
+                                            let newPHP = this.state.playerHP -= enemyDamage
+                                            switch (this.state.enemyName) {
+                                                case "Lich":
+                                                    this.Fireball.play();
+                                                    break;
+                                                case "Dragon":
+                                                    this.FireballBig.play();
+                                                    break;
+                                            }
+                                            this.setState({
+                                                combatMessage: `The ${this.state.enemyName}'s attack is successful!  You take ${enemyDamage} damage!`,
+                                                playerHP: newPHP,
+                                                enemyRoll: null,
+                                                playerRoll: null
+                                            })
+
+                                        }
+                                        else {
+                                            this.setState({
+                                                combatMessage: `The ${this.state.enemyName}'s attack misses!`,
+                                                enemyRoll: null,
+                                                playerRoll: null
+                                            })
+                                        }
+                                        setTimeout(() => {
+                                            this.setState({
+                                                combatMessage: "Select an ability...",
+                                                inCombat: false
+                                            })
+                                        }, 1200)
+                                        playerTurn = true
+
                                     }, 1200)
-                                    playerTurn = true
-
                                 }, 1200)
-                            }, 1200)
-                        }, 1)
+                            }, 1)
 
+                        }, 1200)
                     }, 1200)
                 }, 1200)
-            }, 1200)
 
-        }, 10)
+            }, 10)
+        }
     }
 
     render() {

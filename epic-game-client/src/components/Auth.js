@@ -1,3 +1,6 @@
+//************** AUTH COMPONENT ************************//
+//This component handles the authentication.  Javascript Web Tokens are used to grant access to the API.//
+
 import React from "react";
 import Home from "./Home";
 

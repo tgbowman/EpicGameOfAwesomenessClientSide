@@ -1,3 +1,6 @@
+//************** ENEMY PANEL COMPONENT ************************//
+//This component is used to render the enemy panel during combat//
+
 import React from "react";
 
 class EnemyPanel extends React.Component {

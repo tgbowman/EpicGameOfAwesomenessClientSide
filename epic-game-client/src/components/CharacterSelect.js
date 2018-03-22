@@ -1,3 +1,8 @@
+//************** CHARACTER SELECT COMPONENT ************************//
+//This component renders the character select screen//
+//From here the user can select one of their previously created characters, or create a new character//
+
+
 import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import Logout from "../components/Logout";

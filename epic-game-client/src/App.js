@@ -1,3 +1,6 @@
+//************** APP COMPONENT ************************//
+//This component handles the routing for each screen of the app//
+
 import React from 'react';
 import {Route, BrowserRouter as Router} from "react-router-dom";
 import './App.css';
