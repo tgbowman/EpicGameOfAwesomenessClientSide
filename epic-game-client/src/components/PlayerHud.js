@@ -41,15 +41,16 @@ class PlayerHud extends React.Component {
                             </div>
                         </div>
                         {/*************Player Abilities *************/}
-                        <div onClick={this.props.combatMove} className="abilityBox col-3 align-self-center border border-light bg-dark text-center text-light clickable pathOptionBox" id={this.props.player.unitClass.abilityOneDamage + "!" + this.props.player.unitClass.abilityOneName}>
-                            <h4 id={this.props.player.unitClass.abilityOneDamage + "!" + this.props.player.unitClass.abilityOneName}>{this.props.player.unitClass.abilityOneName}</h4>
-                            <p id={this.props.player.unitClass.abilityOneDamage + "!" + this.props.player.unitClass.abilityOneName}>{this.props.player.unitClass.abilityOneDescription}</p>
-                            <p id={this.props.player.unitClass.abilityOneDamage + "!" + this.props.player.unitClass.abilityOneName}>Damage: {this.props.player.unitClass.abilityOneDamage}</p>
+                        <div onClick={this.props.combatMove} className="abilityBox col-3 align-self-center border border-light bg-dark text-center text-light clickable pathOptionBox" id={this.props.player.unitClass.abilityOneDamage + "-" + this.props.player.unitClass.abilityOneHealing+ "!" + this.props.player.unitClass.abilityOneName}>
+                            <h4 id={this.props.player.unitClass.abilityOneDamage + "-" + this.props.player.unitClass.abilityOneHealing+ "!" + this.props.player.unitClass.abilityOneName}>{this.props.player.unitClass.abilityOneName}</h4>
+                            <p id={this.props.player.unitClass.abilityOneDamage + "-" + this.props.player.unitClass.abilityOneHealing+"!" + this.props.player.unitClass.abilityOneName}>{this.props.player.unitClass.abilityOneDescription}</p>
+                            <p id={this.props.player.unitClass.abilityOneDamage + "-" + this.props.player.unitClass.abilityOneHealing+"!" + this.props.player.unitClass.abilityOneName}>Damage: {this.props.player.unitClass.abilityOneDamage}</p>
                         </div>
                         <div onClick={this.props.combatMove} className="abilityBox col-3 align-self-center border border-light bg-dark text-center text-light clickable pathOptionBox" id={this.props.player.unitClass.abilityTwoDamage + "!" + this.props.player.unitClass.abilityTwoName}>
-                            <h4 id={this.props.player.unitClass.abilityTwoDamage + "!" + this.props.player.unitClass.abilityTwoName}>{this.props.player.unitClass.abilityTwoName}</h4>
-                            <p id={this.props.player.unitClass.abilityTwoDamage + "!" + this.props.player.unitClass.abilityTwoName}>{this.props.player.unitClass.abilityTwoDescription}</p>
-                            <p id={this.props.player.unitClass.abilityTwoDamage + "!" + this.props.player.unitClass.abilityTwoName}>Damage: {this.props.player.unitClass.abilityTwoDamage}</p>
+                            <h4 id={this.props.player.unitClass.abilityTwoDamage + "-" + this.props.player.unitClass.abilityTwoHealing+"!" + this.props.player.unitClass.abilityTwoName}>{this.props.player.unitClass.abilityTwoName}</h4>
+                            <p id={this.props.player.unitClass.abilityTwoDamage + "-" + this.props.player.unitClass.abilityTwoHealing+"!" + this.props.player.unitClass.abilityTwoName}>{this.props.player.unitClass.abilityTwoDescription}</p>
+                            <p className="abilityData" id={this.props.player.unitClass.abilityTwoDamage + "-" + this.props.player.unitClass.abilityTwoHealing+"!" + this.props.player.unitClass.abilityTwoName}>Damage: {this.props.player.unitClass.abilityTwoDamage}</p>
+                            <p className="abilityData" id={this.props.player.unitClass.abilityTwoDamage + "-" + this.props.player.unitClass.abilityTwoHealing+"!" + this.props.player.unitClass.abilityTwoName}> Healing: {this.props.player.unitClass.abilityTwoHealing}</p>
                         </div>
                     </div>
                 </div>
