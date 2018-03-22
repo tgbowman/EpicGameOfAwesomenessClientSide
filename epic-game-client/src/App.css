@@ -101,3 +101,7 @@ text-align: center;
 progress {
   color: red;
 }
+
+#characterCreateBtn {
+  margin-top:10px;
+}

@@ -1,3 +1,8 @@
+//************** CHARACTER CREATE COMPONENT ************************//
+//This component renders the Character Create screen//
+//This component handles all functionality for allowing users to create a new character//
+
+
 import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import Logout from "../components/Logout";
@@ -29,6 +34,7 @@ class CharacterCreate extends React.Component {
             }
         this.handleChange = this.handleChange.bind(this)
         this.createCharacter = this.createCharacter.bind(this)
+        this.selected = this.selected.bind(this)
     }
     //Invoke to determine if there is a logged in user.
     isUserLoggedIn() {
@@ -106,7 +112,21 @@ class CharacterCreate extends React.Component {
 
     }
 
-
+selected(e){
+    let images = Array.from(document.getElementsByClassName("profileImg"))
+    
+    images.forEach(i=> {
+        if(i.classList.contains("border-light")){
+            i.classList.remove("border-light")
+            i.classList.remove("border")
+        }
+    })
+    e.target.classList.add("border")
+    e.target.classList.add("border-light")
+    this.setState({
+        characterProfileImgUrl: e.target.id
+    })
+}
     render() {
         if (this.isUserLoggedIn()) {
             return (
@@ -131,10 +151,11 @@ class CharacterCreate extends React.Component {
                         <li>{this.state.characterAbility2}: {this.state.characterAbility2Desc}</li>
                     </ul>
                     <h4>Profile Image</h4>
-                    <img className="clickable profileImg" name="characterProfileImgUrl" src={this.state.ProfilePicOption1} id={this.state.ProfilePicOption1} width="150" height="279" onClick={this.handleChange} />
-                    <img className="clickable profileImg" name="characterProfileImgUrl" src={this.state.ProfilePicOption2} id={this.state.ProfilePicOption2} width="150" height="279"onClick={this.handleChange} />
+                    <p>(Click a profile picture to select it)</p>
+                    <img className="clickable profileImg" name="characterProfileImgUrl" src={this.state.ProfilePicOption1} id={this.state.ProfilePicOption1} width="150" height="279" onClick={this.selected} />
+                    <img className="clickable profileImg" name="characterProfileImgUrl" src={this.state.ProfilePicOption2} id={this.state.ProfilePicOption2} width="150" height="279"onClick={this.selected} />
                     <br />
-                    <button onClick = {this.createCharacter}>Create Character</button>
+                    <button id="characterCreateBtn" onClick = {this.createCharacter}>Create Character</button>
                 </div>
             )
         }

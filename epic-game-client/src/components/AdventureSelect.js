@@ -1,3 +1,6 @@
+//************** ADVENTURE SELECT COMPONENT ************************//
+//This component is used to render the Adventure Select screen and allows the user to select an adventure to embark upon//
+
 import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import Logout from "../components/Logout";

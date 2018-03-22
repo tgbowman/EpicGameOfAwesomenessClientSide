@@ -1,3 +1,6 @@
+//************** LOGOUT COMPONENT ************************//
+//This component renders the logout button and handles its functionality//
+
 import React from "react";
 import { Link, Redirect, withRouter } from "react-router-dom";
 

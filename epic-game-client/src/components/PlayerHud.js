@@ -1,3 +1,9 @@
+//************** PLAYER HUD COMPONENT ************************//
+//This component renders the player's Heads Up Display (HUD).//
+//It can either render it for story choices or combat choices//
+
+
+
 import React from "react";
 import Logout from "../components/Logout"
 
