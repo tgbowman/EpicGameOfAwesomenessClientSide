@@ -41,6 +41,17 @@ ul  {
   margin-bottom:10px;
 }
 
+.lightBg {
+  background-color: #647584;
+  width: 800px;
+  margin-right: auto;
+  margin-left:auto;
+  margin-top: 50px;
+  padding: 25px;
+  
+
+}
+
 .combatMessagePanel {
   margin-top: 450px;
 }
@@ -58,6 +69,22 @@ ul  {
   margin-left: 170px;
   margin-top: -145px;
   color: green;
+}
+
+.homeScreen {
+  margin-top: 200px;
+}
+
+.Login {
+  margin-top: 100px;
+}
+
+#loginBtn {
+  margin-top: 15px;
+}
+
+#userName {
+  margin-bottom: 10px;
 }
 
 #enemyHealthBar {

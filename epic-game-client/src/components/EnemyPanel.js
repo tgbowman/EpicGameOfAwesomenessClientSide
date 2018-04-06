@@ -20,7 +20,7 @@ class EnemyPanel extends React.Component {
 
                             <h2 className="col-4 offset-3 enemyName">{this.props.enemy.name}</h2>
                             <h4 className="col-4 offset-3 enemyHealth">Health: {this.props.enemyHP}</h4>
-                            <progress className="col-4 offset-2" id="enemyHealthBar" value={this.props.enemyHP} max="100"></progress>
+                            <progress className="col-4 offset-2" id="enemyHealthBar" value={this.props.enemyHP} max="50"></progress>
 
 
                         </div>

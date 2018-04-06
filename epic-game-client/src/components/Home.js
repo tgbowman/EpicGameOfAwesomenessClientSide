@@ -29,7 +29,7 @@ class Home extends React.Component {
     render() {
         if (!localStorage.getItem("token")) {
             return (
-                <div className="text-center">
+                <div className="text-center homeScreen">
                     <h1 className="display-2 text-light">The Epic Game of Awesomeness</h1>
                     <Link className="light-link" to="/login">Login/Register</Link>
                 </div>

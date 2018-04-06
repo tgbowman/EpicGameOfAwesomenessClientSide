@@ -76,14 +76,14 @@ class Auth extends React.Component {
     render() {
 
         return (
-            <div className="text-light text-center">
+            <div className="text-light text-center Login">
                 <h2>Login</h2>
                 <p>If you don't have an account, entering an email and password will create one for you!</p>
-                <input type="text" name="userEmail" placeholder="Email" value={this.state.userEmail} onChange={this.handleChange} />
+                <input id="userName" type="text" name="userEmail" placeholder="Email" value={this.state.userEmail} onChange={this.handleChange} />
                 <br />
                 <input type="password" name="userPassword" placeholder="Password" value={this.state.userPassword} onChange={this.handleChange} />
                 <br />
-                <button onClick={this.userLogin}>Login/Register</button>
+                <button id="loginBtn" onClick={this.userLogin}>Login/Register</button>
             </div>
 
 

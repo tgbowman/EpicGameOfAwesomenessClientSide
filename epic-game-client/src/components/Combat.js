@@ -19,6 +19,7 @@ import QuickAttack from "../Sound/QuickAttack.mp3";
 import SpikeArmor from "../Sound/SpikeArmor.mp3";
 import Backstab from "../Sound/Backstab.mp3";
 import Eviscerate from "../Sound/Eviscerate.mp3";
+import RollDice from "../Sound/RollDice.mp3"
 
 class Combat extends React.Component {
     constructor(props) {
@@ -59,6 +60,7 @@ class Combat extends React.Component {
         this.SpikeArmor = new Audio(SpikeArmor)
         this.Backstab = new Audio(Backstab)
         this.Eviscerate = new Audio(Eviscerate)
+        this.RollDice = new Audio(RollDice)
     }
     componentWillUnmount() {
         this.BlackBlade.pause()
@@ -130,6 +132,8 @@ class Combat extends React.Component {
     }
     //random number generator between 1 and 20
     rollDice() {
+        // this.RollDice.play();
+        // this.RollDice.pause()
         return (Math.floor(Math.random() * 20) + 1)
     }
 
@@ -173,7 +177,7 @@ class Combat extends React.Component {
                         if (pRoll >= eRoll) {
                             let newEnemyHP = this.state.enemyHP -= playerDamage
                             let newPlayerHP
-                            if (this.state.playerHP + playerHealing >= 100) {
+                            if (this.state.playerHP + playerHealing > 100) {
                                 newPlayerHP = 100
                             }
                             else {

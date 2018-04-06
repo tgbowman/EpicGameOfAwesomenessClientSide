@@ -130,7 +130,7 @@ selected(e){
     render() {
         if (this.isUserLoggedIn()) {
             return (
-                <div className="text-light text-center">
+                <div className="text-light text-center lightBg border border-light">
                     <nav>
                         <Logout />
                     </nav>
@@ -151,7 +151,7 @@ selected(e){
                         <li>{this.state.characterAbility2}: {this.state.characterAbility2Desc}</li>
                     </ul>
                     <h4>Profile Image</h4>
-                    <p>(Click a profile picture to select it)</p>
+                    <p>(Click a profile picture to select it)10</p>
                     <img className="clickable profileImg" name="characterProfileImgUrl" src={this.state.ProfilePicOption1} id={this.state.ProfilePicOption1} width="150" height="279" onClick={this.selected} />
                     <img className="clickable profileImg" name="characterProfileImgUrl" src={this.state.ProfilePicOption2} id={this.state.ProfilePicOption2} width="150" height="279"onClick={this.selected} />
                     <br />
