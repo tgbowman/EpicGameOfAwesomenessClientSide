@@ -26,6 +26,7 @@ class Combat extends React.Component {
         super(props)
         this.state = {
             characterId: localStorage.getItem("characterId"),
+            token: localStorage.getItem("token"),
             previousOptionId: null,
             inCombat: false,
             enemyName: "",

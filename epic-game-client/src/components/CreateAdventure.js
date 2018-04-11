@@ -1,88 +1,67 @@
 import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import Logout from "../components/Logout";
+import CreateRoadBlock from "../components/CreateRoadBlock"
 
 class CreateAdventure extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            previousPathOption: "",
-            prevPathOptionId: null,
-            adventureStart: false,
-            roadBlockDesc: null,
-            adventureEnd: false,
-            pathOption1: null,
-            pathOption2: null
+            adventureTitle: null,
+            adventureDesc: null,
+            targetUrl: "http://localhost:5000/api",
+            token: localStorage.getItem("token"),
+            adventureID: null
+
         }
-        this.handleChange = this.handleChange.bind(this)
     }
 
-//Function that updates the state when input fields are changed.
-    handleChange(e) {
-        switch (e.target.name) {
-            case "startAdv":
+    createAdventure() {
+        let adventureObj =
+            {
+                "Title": this.state.adventureTitle,
+                "Description": this.state.adventureDesc
+            }
+
+        fetch(this.state.targetUrl + "adventure", {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                'Authorization': 'Bearer ' + this.state.token,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(adventureObj)
+        })
+            .then(r => r.json())
+            .then(data => {
                 this.setState({
-                    adventureStart: e.target.value
+                    adventureID: data.id
                 })
-                break;
-            case "roadBlockDesc":
-                this.setState({
-                    roadBlockDesc: e.target.value
-                })
-                break;
-            case "endAdv":
-                this.setState({
-                    adventureEnd: e.target.value
-                })
-                break;
-            case "pathOption1":
-                this.setState({
-                    pathOption1: e.target.value
-                })
-                break;
-            case "pathOption2":
-                this.setState({
-                    pathOption2: e.target.value
-                })
-                break;
-        }
-
-
-//Function that will create the road block based on the user input.
-        createRoadBlock()
-        {
-
-        }
-
-
-
-
-
+            })
     }
+
+
+
     render() {
-        return (
+        if (this.state.adventureID === null) {
+            return (
+                <div>
+                    <Logout />
+                    <h2> Create New Adventure </h2>
 
-            <div>
-                <h2> Create a Road Block! </h2>
-                <input name="startAdv" type="checkbox" id="startAdvBool" onChange={this.handleChange} />
-                <label for="startAdvBool">First Road Block</label>
+                    <input type="text" name="adventureTitle" placeholder="Adventure Title" />
 
-                <h3> Previous Path Option: </h3>
-                <p id="prevOption"> {this.state.previousPathOption} </p>
+                    <input type="text" name="adventureDesc" placeholder="Adventure Description (Optional)" />
 
-                <input placeholder="Road Block Description" type="text" name="roadBlockDesc" onChange={this.handleChange}/>
-
-                <input name="endAdv" type="checkbox" id="endAdvBool" onChange={this.handleChange}/>
-                <label for="endAdvBool">End of Adventure</label>
-
-                <input placeholder="Path Option 1" type="text" name="pathOption1" onChange={this.handleChange}/>
-
-                <input placeholder="Path Option 2" type="text" name="pathOption2" onChange={this.handleChange}/>
-
-                <button id="createRoadBlock">Create Road Block</button>
-
-
-
-            </div>)
+                    <button name="createAdventure" onClick={this.createAdventure}>Create Adventure </button>
+                </div>
+            )
+        } else {
+            return (
+                <div>
+                    <CreateRoadBlock adventureId={this.state.adventureID}/>
+                </div>
+            )
+        }
     }
 }
